@@ -3,6 +3,14 @@ defmodule AIChat do
   Documentation for `AIChat`.
   """
 
+  @default_model %{provider: :ollama, id: "llama3.2"}
+
+  defp stream(prompt) when is_binary(prompt) do
+    Keyword.get([], :model, @default_model)
+    |> ReqLLM.model!
+    |> ReqLLM.stream_text(prompt)
+  end
+
   @doc """
     Returns a response to the prompt.
 
@@ -10,16 +18,14 @@ defmodule AIChat do
 
       iex> AIChat.ask("Tell me a joke in Elixir!")
   """
-  def ask(prompt) when is_bitstring(prompt) do
-    model = ReqLLM.model!(%{id: "llama3.2", provider: "ollama"})
-    case ReqLLM.stream_text(model, prompt) do
+  def ask(prompt) when is_binary(prompt) do
+    case stream(prompt) do
       {:ok, stream_response} ->
-        IO.puts("🤖 Thinking...")
         stream_response
         |> ReqLLM.StreamResponse.tokens()
         |> Enum.each(&IO.write/1)
       {:error, reason} ->
-        IO.puts("Error: #{inspect(reason)}")
+        {:error, reason}
     end
   end
 end

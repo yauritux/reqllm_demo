@@ -15,7 +15,7 @@ IO.puts("  (Pausing for inspection. Type `continue` or `respawn` to proceed.)")
 
 # A simple synchronous call.
 # No tools, no streaming, just a prompt string.
-{:ok, response} = ReqLLM.generate_text(model, "Explain why Elixir is reat in one sentence.")
+{:ok, response} = ReqLLM.generate_text(model, "Explain why Elixir is great in one sentence.")
 
 IO.puts(">> 2. Response received.")
 IEx.pry()
