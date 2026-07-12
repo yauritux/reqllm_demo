@@ -5,7 +5,7 @@ defmodule AIChat do
 
   @default_model %{provider: :ollama, id: "llama3.2"}
 
-  defp stream(prompt) when is_binary(prompt) do
+  defp stream(prompt) do
     Keyword.get([], :model, @default_model)
     |> ReqLLM.model!
     |> ReqLLM.stream_text(prompt)
