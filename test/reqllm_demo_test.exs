@@ -1,6 +1,6 @@
 require IEx
 
-{:ok ,response } = ReqLLM.generate_text("ollama:llama3.2", "Hello!")
+{:ok ,response} = ReqLLM.generate_text("ollama:llama3.2", "Hello!")
 
 IEx.pry()
 
@@ -13,3 +13,17 @@ model = ReqLLM.model!(%{id: "llama3.2", provider: "ollama"})
 stream_response
   |> ReqLLM.StreamResponse.tokens()
   |> Enum.each(&IO.write/1)
+
+IEx.pry()
+
+{:ok, response2} = ReqLLM.generate_text(
+  model,
+  [
+    ReqLLM.Context.system("You are a helpful coding assistant."),
+    ReqLLM.Context.user("Explain recursion in Elixir")
+  ],
+  temperature: 0.7,
+  max_tokens: 200
+)
+
+IEx.pry()
